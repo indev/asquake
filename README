@@ -1,0 +1,21 @@
+FlashQuake
+=======================
+Port created by Kristian Johansson (kristian@soft.se)
+
+## License ##
+Same license as the original Quake 1 source released by ID Software
+See seperate files in c folder
+
+## Build ##
+1. Run make
+2. Might have to create a "objects" and "swc" folder to compile
+3. Compile the quake.swc with the as code and your done.
+
+No data files are included, you have to download Quake 1 Shareware, extract all files in the .pak file.
+
+Couldn't get the program to run with the pak file, not enough memory.
+
+## Other ##
+No sound and the controls are a little crazy. But I don't have much time to put on this
+the next couple of weeks so I release the source if anyone want to continue and contribute. Will
+do my best to get this as complete as possible.
