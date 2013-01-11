@@ -7,8 +7,8 @@ package se.quake
 
 	public class VideoBuffer extends Bitmap
 	{
-		public static var QUAKE_WIDTH:uint = 320;
-		public static var QUAKE_HEIGHT:uint = 240; 
+		public static var QUAKE_WIDTH:uint = 640;
+		public static var QUAKE_HEIGHT:uint = 480; 
 		
 		private var _bitmapData:BitmapData;
 		private var _rect:Rectangle;
@@ -35,6 +35,7 @@ package se.quake
 		
 		public function setPalette( ptrAddr:uint ):void
 		{
+			/*
 			_palette = [];
 			
 			_RAM.position = ptrAddr;
@@ -44,12 +45,13 @@ package se.quake
 			{
 				_palette.push( _RAM.readUnsignedInt() );
 			}
+			*/
 		}
 		
 		public function updateVideoBufferPtr( ptrAddr:uint ):void
 		{
 			_RAM.position = ptrAddr;
-			
+			/*
 			var w:int;
 			var h:int;
 			var byte:int;
@@ -62,8 +64,8 @@ package se.quake
 				}
 			}
 			_pixelBuffer.position = 0;
-			
-			_bitmapData.setPixels( _rect, _pixelBuffer );
+			*/
+			_bitmapData.setPixels( _rect, _RAM );
 		}
 		
 	}

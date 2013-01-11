@@ -626,9 +626,9 @@ int m_multiplayer_cursor;
 
 void M_Menu_MultiPlayer_f(void)
 {
-    key_dest = key_menu;
-    m_state = m_multiplayer;
-    m_entersound = true;
+  //  key_dest = key_menu;
+  //  m_state = m_multiplayer;
+  //  m_entersound = true;
 }
 
 

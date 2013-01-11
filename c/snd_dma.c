@@ -33,22 +33,19 @@ int num_sfx;
 
 sfx_t *ambient_sfx[NUM_AMBIENTS];
 
-int desired_speed = 11025;
-int desired_bits = 16;
-
 int sound_started = 0;
 
-cvar_t bgmvolume = { "bgmvolume", "1", true };
-cvar_t volume = { "volume", "0.7", true };
-
-cvar_t nosound = { "nosound", "0" };
-cvar_t precache = { "precache", "1" };
-cvar_t loadas8bit = { "loadas8bit", "0" };
-cvar_t bgmbuffer = { "bgmbuffer", "4096" };
-cvar_t ambient_level = { "ambient_level", "0.3" };
-cvar_t ambient_fade = { "ambient_fade", "100" };
-cvar_t snd_noextraupdate = { "snd_noextraupdate", "0" };
-cvar_t snd_show = { "snd_show", "0" };
+cvar_t bgmvolume = {"bgmvolume", "1", true};
+cvar_t volume = {"volume", "0.7", true};
+ 
+cvar_t nosound = {"nosound", "0"};
+cvar_t precache = {"precache", "1"};
+cvar_t loadas8bit = {"loadas8bit", "0"};
+cvar_t bgmbuffer = {"bgmbuffer", "4096"};
+cvar_t ambient_level = {"ambient_level", "0.3"};
+cvar_t ambient_fade = {"ambient_fade", "100"};
+cvar_t snd_noextraupdate = {"snd_noextraupdate", "0"};
+cvar_t snd_show = {"snd_show", "0"};
 
 
 // ====================================================================
@@ -62,11 +59,7 @@ cvar_t snd_show = { "snd_show", "0" };
 // number of times S_Update() is called per second.
 //
 
-#ifdef __FreeBSD__
 qboolean fakedma = true;
-#else
-qboolean fakedma = false;
-#endif
 int fakedma_updates = 15;
 
 void S_SoundInfo_f(void)
@@ -152,7 +145,7 @@ void S_Init(void)
 	shm = (void *) Hunk_AllocName(sizeof(*shm), "shm");
 	shm->splitbuffer = 0;
 	shm->samplebits = 16;
-	shm->speed = 22050;
+	shm->speed = 44100;//22050;
 	shm->channels = 2;
 	shm->samples = 32768;
 	shm->samplepos = 0;
@@ -667,7 +660,7 @@ void S_Update(vec3_t origin, vec3_t forward, vec3_t right, vec3_t up)
 	Con_Printf("----(%i)----\n", total);
     }
 // mix some sound
-    S_Update_();
+    //S_Update_();
 }
 
 void GetSoundtime(void)
@@ -701,7 +694,7 @@ void S_ExtraUpdate(void)
 {
     if (snd_noextraupdate.value)
 	return;			// don't pollute timings
-    S_Update_();
+    //S_Update_();
 }
 
 
@@ -713,26 +706,28 @@ void S_Update_(void)
 
     if (!sound_started)
 	return;
-
+	
 // Updates DMA time
-    GetSoundtime();
+   // GetSoundtime();
 
 // check to make sure that we haven't overshot
     if (paintedtime < soundtime) {
 //              Con_Printf ("S_Update_ : overflow\n");
-	paintedtime = soundtime;
+		paintedtime = soundtime;
     }
 // mix to 0.1 seconds ahead of current position
-    endtime = soundtime + 0.1 * shm->speed;
+	// need to divide the speed by channels. soundtime is in PAIRS (stereo)
+    endtime = soundtime + 0.1 * (shm->speed / shm->channels);
     samps = shm->samples >> (shm->channels - 1);
     if (endtime - soundtime > samps)
-	endtime = soundtime + samps;
+		endtime = soundtime + samps;
 
     S_PaintChannels(endtime);
-
+/*	pause?
     if (cls.signon == SIGNONS && cl.paused)
 	Q_memset(shm->buffer, (shm->samplebits == 8) * 0x80,
 		 shm->samples * shm->samplebits / 8);
+*/
 }
 
 /*

@@ -41,7 +41,7 @@ package se.quake
 			"ID1/gfx/dim_tcp.lmp",
 			"ID1/gfx/finale.lmp",
 			"ID1/gfx/help0.lmp",
-			"D1/gfx/help1.lmp",
+			"ID1/gfx/help1.lmp",
 			"ID1/gfx/help2.lmp",
 			"ID1/gfx/help3.lmp",
 			"ID1/gfx/help4.lmp",

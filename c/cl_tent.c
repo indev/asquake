@@ -264,12 +264,16 @@ void CL_UpdateTEnts(void)
 	    else
 		pitch = 270;
 	} else {
-	    yaw = (int) (atan2(dist[1], dist[0]) * 180 / M_PI);
+		// weird direction bug, thanks Michael Michael Rennie
+	    //yaw = (int) (atan2(dist[1], dist[0]) * 180 / M_PI);
+		yaw = (int) (atan2(dist[0], dist[1]) * 180 / M_PI);
 	    if (yaw < 0)
 		yaw += 360;
 
 	    forward = sqrt(dist[0] * dist[0] + dist[1] * dist[1]);
-	    pitch = (int) (atan2(dist[2], forward) * 180 / M_PI);
+		// weird direction bug, thanks Michael Rennie
+	    //pitch = (int) (atan2(dist[2], forward) * 180 / M_PI);
+		pitch = (int) (atan2(forward, dist[2]) * 180 / M_PI);
 	    if (pitch < 0)
 		pitch += 360;
 	}

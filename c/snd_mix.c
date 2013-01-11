@@ -4,10 +4,14 @@
 #include "sound.h"
 
 #define	PAINTBUFFER_SIZE	512
+#define PAINT_BUFFER_SCALE 32768.0f // Used when filling the flash sound buffer
+	
 portable_samplepair_t paintbuffer[PAINTBUFFER_SIZE];
 int snd_scaletable[32][256];
 int *snd_p, snd_linear_count, snd_vol;
 short *snd_out;
+
+AS3_Val flashSampleData;
 
 void Snd_WriteLinearBlastStereo16(void);
 
@@ -66,6 +70,25 @@ void S_TransferStereo16(int endtime)
 
 void S_TransferPaintBuffer(int endtime)
 {
+	//Transfer to the Flash sample data buffer
+	float snddata[2*PAINTBUFFER_SIZE];
+	int samples = (endtime - paintedtime);// * shm->channels; //Number of STEREO samples
+	float f;
+	int i;
+	int n = 0;
+	
+	for(i = 0; i < samples; i++)
+	{
+		f = (float)paintbuffer[i].left / PAINT_BUFFER_SCALE;
+		f = BigFloat(f);
+		snddata[n++] = f;
+		f = (float)paintbuffer[i].right / PAINT_BUFFER_SCALE;
+		f = BigFloat(f);
+		snddata[n++] = f;
+	}
+	
+	AS3_ByteArray_writeBytes(flashSampleData, snddata, 2*samples*sizeof(float));
+/*
     int out_idx;
     int count;
     int out_mask;
@@ -75,9 +98,9 @@ void S_TransferPaintBuffer(int endtime)
     int snd_vol;
 
     if (shm->samplebits == 16 && shm->channels == 2) {
-	S_TransferStereo16(endtime);
-	return;
-    }
+		S_TransferStereo16(endtime);
+		return;
+	}
 
     p = (int *) paintbuffer;
     count = (endtime - paintedtime) * shm->channels;
@@ -111,7 +134,7 @@ void S_TransferPaintBuffer(int endtime)
 	    out_idx = (out_idx + 1) & out_mask;
 	}
     }
-
+*/
 }
 
 /*
@@ -265,6 +288,8 @@ void SND_PaintChannelFrom16(channel_t * ch, sfxcache_t * sc, int endtime);
 
 void S_PaintChannels(int endtime)
 {
+	//printf("S_PaintChannels\n");
+
     int i;
     int end;
     channel_t *ch;

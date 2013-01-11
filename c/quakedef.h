@@ -19,6 +19,7 @@
 #define UNUSED(x)	(x = x)	/* for pesky compiler / lint warnings */
 
 #define	MINIMUM_MEMORY	0x550000
+#define	MINIMUM_MEMORY_LEVELPAK	(MINIMUM_MEMORY + 0x100000)
 
 /* up / down */
 #define	PITCH	0
@@ -209,3 +210,5 @@ void Host_ShutdownServer(qboolean crash);
 
 // the global flash quake object
 AS3_Val flashQuakeObject;
+FILE* flashOpenWriteFile(const char* filename);
+void flashCloseWriteFile(const char* filename);

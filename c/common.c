@@ -947,18 +947,18 @@ void COM_CheckRegistered(void)
     static_registered = 0;
 
     if (h == -1) {
-	Con_Printf("Playing shareware version.\n");
-//              if (com_modified)
-//                      Sys_Error ("You must have the registered version to use modified games");
-//              /*return;*/
+		Con_Printf("Playing shareware version.\n");
+		if (com_modified)
+			Sys_Error ("You must have the registered version to use modified games");
+		return;
     }
 
     Sys_FileRead(h, check, sizeof(check));
     COM_CloseFile(h);
 
     for (i = 0; i < 128; i++)
-	if (pop[i] != (unsigned short) BigShort(check[i]));
-    //Sys_Error ("Corrupted data file.");
+		if (pop[i] != (unsigned short) BigShort(check[i]));
+			Sys_Error ("Corrupted data file.");
 
     Cvar_Set("registered", "1");
     static_registered = 1;
@@ -1253,7 +1253,7 @@ int COM_FindFile(char *filename, int *handle, FILE ** file)
 			Sys_Error("COM_FindFile: neither handle or file set");
 
 			sprintf(netpath, "%s/%s", search->filename, filename);
-			Sys_Printf("COM_FindFile.netpath: %s\n", netpath);
+			//Sys_Printf("COM_FindFile.netpath: %s\n", netpath);
 			findtime = Sys_FileTime(netpath);
 
 			if (findtime == -1)
@@ -1352,7 +1352,7 @@ byte *COM_LoadFile(char *path, int usehunk)
 
 // look for it in the filesystem or pack files
 	len = COM_OpenFile(path, &h);
-	Sys_Printf("COM_OpenFile length: %d\n", len);
+	//Sys_Printf("COM_OpenFile length: %d\n", len);
     if (h == -1)
 	return NULL;
 

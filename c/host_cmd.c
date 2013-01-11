@@ -414,7 +414,9 @@ void Host_Savegame_f(void)
     COM_DefaultExtension(name, ".sav");
 
     Con_Printf("Saving game to %s...\n", name);
-    f = fopen(name, "w");
+    //f = fopen(name, "w");
+	f = flashOpenWriteFile(name);
+	
     if (!f) {
 	Con_Printf("ERROR: couldn't open.\n");
 	return;
@@ -444,7 +446,8 @@ void Host_Savegame_f(void)
 	ED_Write(f, EDICT_NUM(i));
 	fflush(f);
     }
-    fclose(f);
+    //fclose(f);
+	flashCloseWriteFile(name);
     Con_Printf("done.\n");
 }
 
